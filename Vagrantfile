@@ -21,6 +21,7 @@ Vagrant.configure(2) do |config|
   @domain                        ||= '.local'
   @memory                        ||= 512
   @provider                      ||= 'virtualbox'
+  @shell                         ||= nil
   @vms                           ||= []
 
   # hostmanager defaults
@@ -111,11 +112,13 @@ Vagrant.configure(2) do |config|
     val['box']                ||= @box
     val['memory']             ||= @memory
     val['provider']           ||= @provider
+    val['shell']              ||= nil
     val['synced_directories'] ||= []
 
     # vm ansible defaults
     val['ansible_extra_vars']     ||= @ansible_extra_vars
     val['ansible_inventory_path'] ||= @ansible_inventory_path
+    val['ansible_playbook']       ||= nil
     val['ansible_raw_arguments']  ||= @ansible_raw_arguments
 
     # vm settings
