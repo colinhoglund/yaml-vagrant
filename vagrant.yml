@@ -1,0 +1,28 @@
+---
+
+# base config
+box: ubuntu/trusty64
+domain: .local
+
+# vm config
+vms:
+  - name: web
+    ip: 192.168.111.10
+    aliases:
+      - www
+    application_user: www-data
+    synced_directories:
+      - src: site
+        dest: /var/www/html
+    ansible_playbook: web.yml
+    ansible_groups:
+      - web
+  - name: db
+    ip: 192.168.111.11
+    ansible_extra_vars:
+      var: db_var
+    ansible_playbook: db.yml
+    ansible_groups:
+      - db
+    shell: |
+      echo /etc/passwd
