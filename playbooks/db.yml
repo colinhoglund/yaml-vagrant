@@ -1,0 +1,6 @@
+---
+
+- hosts: db
+  become: true
+  tasks:
+    - package: name=mysql-server update_cache=yes

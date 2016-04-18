@@ -16,13 +16,17 @@ class Settings
 
   private
   def set_defaults(defaults)
-    # set base defaults where not defined
-    defaults.each do |k,v|
+    # set all defaults
+    defaults['all'].each do |k,v|
       @settings[k] ||= v
-      # set vm defaults where not defined
+      # set vm defaults
       @settings['vms'].each do |vm|
         vm[k] ||= @settings[k]
       end
+    end
+    # set base only defaults
+    defaults['base'].each do |k,v|
+      @settings[k] ||= v
     end
   end
 end

@@ -4,25 +4,27 @@
 box: ubuntu/trusty64
 domain: .local
 
+# this will run on every vm
+shell: |
+  echo 'base shell commands'
+
 # vm config
 vms:
   - name: web
-    ip: 192.168.111.10
+    ip: 192.168.111.100
     aliases:
       - www
     application_user: www-data
     synced_directories:
       - src: site
         dest: /var/www/html
-    ansible_playbook: web.yml
+    ansible_playbook: playbooks/web.yml
     ansible_groups:
       - web
   - name: db
-    ip: 192.168.111.11
-    ansible_extra_vars:
-      var: db_var
-    ansible_playbook: db.yml
+    ip: 192.168.111.101
+    ansible_playbook: playbooks/db.yml
     ansible_groups:
       - db
     shell: |
-      echo /etc/passwd
+      echo 'vm shell commands'

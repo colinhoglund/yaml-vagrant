@@ -1,25 +1,25 @@
 ---
 
-# vagrant defaults
-application_user: 'vagrant'
-box: base
-disable_default_synced_folder: true
-domain: .local
-memory: 512
-provider: virtualbox
-shell: null
-synced_directories: []
-vms: []
+# default settings for base config and vm specific config
+all:
+  ansible_extra_vars: {}
+  ansible_inventory_path: 'vagrant.py'
+  ansible_playbook: null
+  ansible_raw_arguments: null
+  application_user: 'vagrant'
+  box: base
+  disable_default_synced_folder: true
+  domain: .local
+  memory: 512
+  provider: virtualbox
+  synced_directories: []
 
-# hostmanager defaults
-hostmanager_enabled: true
-hostmanager_ignore_private_ip: false
-hostmanager_include_offline: true
-hostmanager_manage_guest: true
-hostmanager_manage_host: true
-
-# ansible defaults
-ansible_extra_vars: {}
-ansible_inventory_path: 'vagrant.py'
-ansible_playbook: null
-ansible_raw_arguments: null
+# default settings for base config only
+base:
+  hostmanager_enabled: true
+  hostmanager_ignore_private_ip: false
+  hostmanager_include_offline: true
+  hostmanager_manage_guest: true
+  hostmanager_manage_host: true
+  shell: null
+  vms: []
