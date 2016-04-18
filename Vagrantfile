@@ -1,11 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-require 'fileutils'
 require 'pathname'
-require 'tempfile'
 require 'yaml'
-require 'yaml-vagrant/ssh_config.rb'
-require 'yaml-vagrant/settings.rb'
+require './yaml-vagrant/ssh_config'
+require './yaml-vagrant/settings'
 
 Vagrant.configure(2) do |config|
   # get dirname of Vagrantfile
@@ -15,7 +13,7 @@ Vagrant.configure(2) do |config|
   settings = Settings.build(YAML.load_file(dirname + 'vagrant.yml'))
 
   # update ssh config
-  SSHConfig.update(settings['domain'], settings['vms'])
+  SSHConfig.update(dirname, settings['domain'], settings['vms'])
 
   # hostmanager config
   if settings['hostmanager_enabled']
@@ -26,9 +24,6 @@ Vagrant.configure(2) do |config|
     config.hostmanager.manage_host       = settings['hostmanager_manage_host']
   end
 
-  # disable default synced folder
-  config.vm.synced_folder ".", "/vagrant", disabled: settings['disable_default_synced_folder']
-
   # base shell commands
   config.vm.provision 'shell', inline: settings['shell'] if settings['shell']
 
@@ -36,7 +31,7 @@ Vagrant.configure(2) do |config|
   settings['vms'].each do |val|
     config.vm.define val['name'] do |item|
       item.vm.box              = val['box']
-      item.vm.hostname         = hostname
+      item.vm.hostname         = val['name'] + settings['domain']
 
       # default alias to vm name
       val['aliases'] ||= [val['name']]
@@ -49,6 +44,9 @@ Vagrant.configure(2) do |config|
       item.vm.provider val['provider'] do |vb|
         vb.memory = val['memory']
       end
+
+      # disable default synced folder
+      item.vm.synced_folder ".", "/vagrant", disabled: settings['disable_default_synced_folder']
 
       # vm synced folders
       val['synced_directories'].each do |mnt|

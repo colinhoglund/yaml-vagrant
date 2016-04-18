@@ -19,11 +19,9 @@ class Settings
     # set base defaults where not defined
     defaults.each do |k,v|
       @settings[k] ||= v
-    end
-    # set vm defaults where not defined
-    @settings['vms'].each do |vm|
-      defaults['vms'].each do |k,v|
-        vm[k] ||= v
+      # set vm defaults where not defined
+      @settings['vms'].each do |vm|
+        vm[k] ||= @settings[k]
       end
     end
   end
