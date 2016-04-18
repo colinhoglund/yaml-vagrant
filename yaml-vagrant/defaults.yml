@@ -22,7 +22,7 @@ ansible_inventory_path: 'vagrant.py'
 ansible_raw_arguments: null
 
 # vm defaults
-vm:
+vms:
   # vm vagrant defaults
   application_user: 'vagrant'
   synced_directories: []
