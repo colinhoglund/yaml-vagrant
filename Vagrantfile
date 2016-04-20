@@ -2,8 +2,8 @@
 # vi: set ft=ruby :
 require 'pathname'
 require 'yaml'
-require './yaml-vagrant/ssh_config'
-require './yaml-vagrant/settings'
+require_relative 'yaml-vagrant/ssh_config'
+require_relative 'yaml-vagrant/settings'
 
 Vagrant.configure(2) do |config|
   # get dirname of Vagrantfile

@@ -1,3 +1,4 @@
+require 'pathname'
 require 'yaml'
 
 class Settings
@@ -7,7 +8,7 @@ class Settings
     # load settings hash
     @settings = settings
     # set undefined defaults
-    set_defaults(YAML.load_file('yaml-vagrant/defaults.yml'))
+    set_defaults(YAML.load_file(Pathname.new(__FILE__).dirname + 'defaults.yml'))
   end
 
   def self.build(settings)
