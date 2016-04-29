@@ -34,8 +34,7 @@ Vagrant.configure(2) do |config|
       item.vm.hostname         = val['name'] + settings['domain']
 
       # default alias to vm name
-      val['aliases'] ||= [val['name']]
-      item.hostmanager.aliases = val['aliases'].collect { |a| a + settings['domain'] } if settings['hostmanager_enabled']
+      item.hostmanager.aliases = val['aliases'].collect { |a| a + settings['domain'] } if settings['hostmanager_enabled'] and val['aliases']
 
       # vm network config
       item.vm.network 'private_network', ip: val['ip']
