@@ -30,14 +30,22 @@ class SSHConfig
     # setup variables
     ssh_config_path      = ENV['HOME'] + '/.ssh/config'
     ssh_config           = @ssh_start_msg + @ssh_hosts + @ssh_end_msg
+
+    # create ~/.ssh/config
+    if not File.exists?(ssh_config_path)
+      File.new(ssh_config_path, 'w')
+    end
+
+    # check if ~/.ssh/config is currently managed by vagrant
     vagrant_managed_file = File.readlines(ssh_config_path).grep(@ssh_start_msg).any?
     
-    # append vagrant ssh config if it doesn't exist
+    # append vagrant ssh config if it doesn't exist, or
+    # overwrite existing vagrant ssh config
     if not vagrant_managed_file
       File.open(ssh_config_path, 'a') do |file|
         file.puts "\n" + ssh_config
       end
-    else # overwrite existing vagrant ssh config
+    else
       # open temp file for updating
       tmp_file = Tempfile.new('ssh_config-' + Time.now.to_i.to_s)
       begin
