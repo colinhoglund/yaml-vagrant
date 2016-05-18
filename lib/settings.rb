@@ -8,7 +8,7 @@ class Settings
     # load settings hash
     @settings = settings
     # set undefined defaults
-    set_defaults(YAML.load_file(Pathname.new(__FILE__).dirname + 'defaults.yml'))
+    set_defaults(YAML.load_file(Pathname.new(__FILE__).dirname + 'settings.yml'))
   end
 
   def self.build(settings)

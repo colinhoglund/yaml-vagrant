@@ -38,7 +38,7 @@ class SSHConfig
 
     # check if ~/.ssh/config is currently managed by vagrant
     vagrant_managed_file = File.readlines(ssh_config_path).grep(@ssh_start_msg).any?
-    
+
     # append vagrant ssh config if it doesn't exist, or
     # overwrite existing vagrant ssh config
     if not vagrant_managed_file

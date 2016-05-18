@@ -1,6 +1,0 @@
----
-
-- hosts: web
-  become: true
-  tasks:
-    - package: name=nginx update_cache=yes

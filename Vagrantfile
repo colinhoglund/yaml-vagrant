@@ -2,19 +2,23 @@
 # vi: set ft=ruby :
 require 'pathname'
 require 'yaml'
-require_relative 'yaml-vagrant/ssh_config'
-require_relative 'yaml-vagrant/settings'
+require_relative 'lib/ssh_config'
+require_relative 'lib/settings'
+
+# get dirname of Vagrantfile
+dirname = Pathname.new(__FILE__).dirname
+
+# load yaml vagrant config
+vagrant_config = dirname + 'vagrant.yml'
+if not File.exists?(vagrant_config)
+  abort vagrant_config.to_s + " is missing"
+end
+settings = Settings.build(YAML.load_file(vagrant_config))
+
+# update ssh config
+SSHConfig.update(dirname, settings['domain'], settings['vms'])
 
 Vagrant.configure(2) do |config|
-  # get dirname of Vagrantfile
-  dirname = Pathname.new(__FILE__).dirname
-
-  # load yaml vagrant config
-  settings = Settings.build(YAML.load_file(dirname + 'vagrant.yml'))
-
-  # update ssh config
-  SSHConfig.update(dirname, settings['domain'], settings['vms'])
-
   # hostmanager config
   if settings['hostmanager_enabled']
     config.hostmanager.enabled           = settings['hostmanager_enabled']
