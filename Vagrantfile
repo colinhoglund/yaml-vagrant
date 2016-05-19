@@ -11,9 +11,11 @@ dirname = Pathname.new(__FILE__).dirname
 # load yaml vagrant config
 vagrant_config = dirname + 'vagrant.yml'
 if not File.exists?(vagrant_config)
-  abort vagrant_config.to_s + " is missing"
+  # pass empty hash to set defaults
+  settings = Settings.build({})
+else
+  settings = Settings.build(YAML.load_file(vagrant_config))
 end
-settings = Settings.build(YAML.load_file(vagrant_config))
 
 # update ssh config
 SSHConfig.update(dirname, settings['domain'], settings['vms'])

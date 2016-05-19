@@ -7,7 +7,8 @@ all:
   ansible_playbook: null
   ansible_raw_arguments: null
   application_user: 'vagrant'
-  box: base
+  # using ubuntu/trusty64 because it's the most downlaoded
+  box: ubuntu/trusty64
   disable_default_synced_folder: true
   domain: .local
   memory: 512
@@ -22,4 +23,7 @@ base:
   hostmanager_manage_guest: true
   hostmanager_manage_host: true
   shell: null
-  vms: []
+  vms:
+    - name: default
+      # need a default ip for .ssh/config to work
+      ip: 192.168.123.123

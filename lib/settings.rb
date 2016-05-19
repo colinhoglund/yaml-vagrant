@@ -17,6 +17,10 @@ class Settings
 
   private
   def set_defaults(defaults)
+    # set base only defaults
+    defaults['base'].each do |k,v|
+      @settings[k] ||= v
+    end
     # set all defaults
     defaults['all'].each do |k,v|
       @settings[k] ||= v
@@ -24,10 +28,6 @@ class Settings
       @settings['vms'].each do |vm|
         vm[k] ||= @settings[k]
       end
-    end
-    # set base only defaults
-    defaults['base'].each do |k,v|
-      @settings[k] ||= v
     end
   end
 end
