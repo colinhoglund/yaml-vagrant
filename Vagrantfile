@@ -48,6 +48,13 @@ Vagrant.configure(2) do |config|
       # vm provider and resource settings
       item.vm.provider val['provider'] do |vb|
         vb.memory = val['memory']
+
+        # Use paravirtualized network in virtualbox for better performance
+        # https://www.virtualbox.org/manual/ch06.html#nichardware
+        if val['provider'] == 'virtualbox'
+          vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
+          vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
+        end
       end
 
       # disable default synced folder
