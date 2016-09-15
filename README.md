@@ -16,6 +16,8 @@ By default, yaml-vagrant handles updating the user's local ~/.ssh/config. It als
 yaml-vagrant works with the Ansible provisioner using the contained dynamic inventory script ([vagrant.py](https://github.com/colinhoglund/yaml-vagrant/blob/master/extras/vagrant.py)). This allows you to define ansible settings and call ansible playbooks for vagrant VMs.
 
 ## Usage
+The following examples give an idea of what a vagrant.yml file looks like. Once the vagrant.yml file has been created, you can use vagrant like you normally would (`vagrant status`, `vagrant up app`, etc.)
+
 Example vagrant.yml:
 
     ---
@@ -37,7 +39,7 @@ Example vagrant.yml:
         ip: 192.168.10.10
         # DNS aliases for local /etc/hosts (app.local, www.local)
         aliases: [ app, www ]
-        # sync workstation source directory to VM destination directory
+        # sync workstation src directory to VM dest directory
         synced_directories:
           - { src: ~/code/app, dest: /srv/app }
           
@@ -53,6 +55,7 @@ Example vagrant.yml using the Ansible provisioner:
     domain: .local
     shell: |
       sudo apt-get remove -y puppet* chef*
+      
     ansible_inventory_path: inventory/vagrant.py
     
     vms:
