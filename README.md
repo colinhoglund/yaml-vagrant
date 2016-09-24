@@ -21,9 +21,9 @@ The following examples give an idea of what a vagrant.yml file looks like. Once 
 Example vagrant.yml:
 
     ---
-        
+
     ## base config
-    
+
     # default box
     box: ubuntu/trusty64
     # local dev domain
@@ -31,9 +31,9 @@ Example vagrant.yml:
     # generic shell script to run on all hosts
     shell: |
       sudo apt-get remove -y puppet* chef*
-      
+
     ## vm specific config
-    
+
     vms:
       - name: app
         ip: 192.168.10.10
@@ -42,7 +42,7 @@ Example vagrant.yml:
         # sync workstation src directory to VM dest directory
         synced_directories:
           - { src: ~/code/app, dest: /srv/app }
-          
+
       - name: db
         ip: 192.168.10.11
         aliases: [ db ]
@@ -50,14 +50,14 @@ Example vagrant.yml:
 Example vagrant.yml using the Ansible provisioner:
 
     ---
-    
+
     box: ubuntu/trusty64
     domain: .local
     shell: |
       sudo apt-get remove -y puppet* chef*
-      
+
     ansible_inventory_path: inventory/vagrant.py
-    
+
     vms:
       - name: app
         memory: 1536
