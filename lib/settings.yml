@@ -6,6 +6,7 @@ all:
   ansible_inventory_path: 'vagrant.py'
   ansible_playbook: null
   ansible_raw_arguments: null
+  ansible_limit: all
   application_user: 'vagrant'
   # using ubuntu/trusty64 because it's the most downlaoded
   box: ubuntu/trusty64
