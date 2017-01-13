@@ -19,14 +19,20 @@ class Settings
   def set_defaults(defaults)
     # set base only defaults
     defaults['base'].each do |k,v|
-      @settings[k] ||= v
+      if not @settings.key?(k)
+        @settings[k] = v
+      end
     end
     # set all defaults
     defaults['all'].each do |k,v|
-      @settings[k] ||= v
+      if not @settings.key?(k)
+        @settings[k] = v
+      end
       # set vm defaults
       @settings['vms'].each do |vm|
-        vm[k] ||= @settings[k]
+        if not vm.key?(k)
+          vm[k] = v
+        end
       end
     end
   end
