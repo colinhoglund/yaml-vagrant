@@ -15,6 +15,7 @@ class Settings
     return new(settings).settings
   end
 
+  # sets default settings when not explicitly defined in vagrant.yml
   private
   def set_defaults(defaults)
     # set base only defaults
@@ -23,15 +24,15 @@ class Settings
         @settings[k] = v
       end
     end
-    # set all defaults
+    # set 'all' defaults
     defaults['all'].each do |k,v|
       if not @settings.key?(k)
         @settings[k] = v
       end
-      # set vm defaults
+      # vm settings default to 'all' value
       @settings['vms'].each do |vm|
         if not vm.key?(k)
-          vm[k] = v
+          vm[k] = @settings[k]
         end
       end
     end
