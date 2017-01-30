@@ -75,7 +75,7 @@ Vagrant.configure(2) do |config|
         item.vm.provision 'ansible' do |ansible|
           ansible.host_key_checking = false
           ansible.inventory_path    = dirname + val['ansible_inventory_path']
-          ansible.limit             = 'all'
+          ansible.limit             = val['ansible_limit']
           ansible.raw_arguments     = val['ansible_raw_arguments']
           ansible.extra_vars        = val['ansible_extra_vars']
           ansible.playbook          = val['ansible_playbook']
