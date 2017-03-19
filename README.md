@@ -13,7 +13,7 @@ By default, yaml-vagrant handles updating the user's local ~/.ssh/config. It als
 - [vagrant-hostmanager](https://github.com/devopsgroup-io/vagrant-hostmanager)
 
 ## Ansible
-yaml-vagrant works with the Ansible provisioner using the contained dynamic inventory script ([vagrant.py](https://github.com/colinhoglund/yaml-vagrant/blob/master/extras/vagrant.py)). This allows you to define ansible settings and call ansible playbooks for vagrant VMs.
+yaml-vagrant works with the Ansible provisioner using the contained dynamic inventory script ([vagrant.py](https://github.com/colinhoglund/yaml-vagrant/blob/master/vagrant.py)). This allows you to define ansible settings and call ansible playbooks for vagrant VMs.
 
 ## Usage
 The following examples give an idea of what a vagrant.yml file looks like. Once the vagrant.yml file has been created, you can use vagrant like you normally would (`vagrant status`, `vagrant up app`, etc.)
