@@ -66,5 +66,5 @@ Example vagrant.yml using the Ansible provisioner:
         synced_directories:
           - { src: ~/code/app, dest: /srv/app }
         ansible_playbook: site.yml
-        ansible_raw_arguments: [ '--limit=app' ]
+        ansible_limit: app
         ansible_groups: [ app ]
