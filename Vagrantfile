@@ -16,7 +16,6 @@ def load_settings(overrides)
     'ansible_limit'                 => 'all',
     'ansible_playbook'              => nil,
     'ansible_raw_arguments'         => nil,
-    'application_user'              => 'vagrant',
     'box'                           => 'ubuntu/trusty64',
     'disable_default_synced_folder' => true,
     'domain'                        => '.local',
@@ -29,6 +28,7 @@ def load_settings(overrides)
     'provider'                      => 'virtualbox',
     'shell'                         => nil,
     'synced_directories'            => [],
+    'user'                          => 'vagrant',
     'vms'                           => [{'name' => 'default', 'ip' => '192.168.123.123'}]
   }
 
@@ -50,23 +50,22 @@ end
 
 def update_ssh_config(domain, vms)
   # setup variables
-  vms = vms.collect { |vm| {:name => vm['name'], :ip => vm['ip']}}
   ssh_config_path = ENV['HOME'] + '/.ssh/config'
 
   # assemble ssh config string
   ssh_start_msg = "## start vagrant managed config ##\n"
   ssh_end_msg = "## end vagrant managed config ##\n"
   ssh_hosts = "Host *#{domain}\n"\
-    "  User vagrant\n"\
     "  UserKnownHostsFile /dev/null\n"\
     "  StrictHostKeyChecking no\n"\
     "  PasswordAuthentication no\n"\
     "  IdentitiesOnly yes\n"\
     "  LogLevel FATAL\n"
   vms.each do |val|
-    ssh_hosts += "Host #{val[:name] + domain}\n"\
-      "  HostName #{val[:ip]}\n"\
-      "  IdentityFile #{Pathname.new(__FILE__).dirname}/.vagrant/machines/#{val[:name]}/virtualbox/private_key\n"
+    ssh_hosts += "Host #{val['name'] + domain}\n"\
+      "  User #{val['user']}\n"\
+      "  HostName #{val['ip']}\n"\
+      "  IdentityFile #{Pathname.new(__FILE__).dirname}/.vagrant/machines/#{val['name']}/virtualbox/private_key\n"
   end
   ssh_config = ssh_start_msg + ssh_hosts + ssh_end_msg
 
@@ -170,8 +169,8 @@ Vagrant.configure(2) do |config|
       # vm synced folders
       val['synced_directories'].each do |mnt|
         item.vm.synced_folder mnt['src'], mnt['dest'],
-          owner: val['application_user'],
-          group: val['application_user']
+          owner: val['user'],
+          group: val['user']
       end
 
       # vm shell commands
