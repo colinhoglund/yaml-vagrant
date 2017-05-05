@@ -61,11 +61,11 @@ def update_ssh_config(domain, vms)
     "  PasswordAuthentication no\n"\
     "  IdentitiesOnly yes\n"\
     "  LogLevel FATAL\n"
-  vms.each do |val|
-    ssh_hosts += "Host #{val['name'] + domain}\n"\
-      "  User #{val['user']}\n"\
-      "  HostName #{val['ip']}\n"\
-      "  IdentityFile #{Pathname.new(__FILE__).dirname}/.vagrant/machines/#{val['name']}/virtualbox/private_key\n"
+  vms.each do |vm|
+    ssh_hosts += "Host #{vm['name'] + domain}\n"\
+      "  User #{vm['user']}\n"\
+      "  HostName #{vm['ip']}\n"\
+      "  IdentityFile #{Pathname.new(__FILE__).dirname}/.vagrant/machines/#{vm['name']}/virtualbox/private_key\n"
   end
   ssh_config = ssh_start_msg + ssh_hosts + ssh_end_msg
 
@@ -140,24 +140,24 @@ Vagrant.configure(2) do |config|
   config.vm.provision 'shell', inline: settings['shell'] if settings['shell']
 
   # configure VMs
-  settings['vms'].each do |val|
-    config.vm.define val['name'] do |item|
-      item.vm.box              = val['box']
-      item.vm.hostname         = val['name'] + settings['domain']
+  settings['vms'].each do |vm|
+    config.vm.define vm['name'] do |item|
+      item.vm.box              = vm['box']
+      item.vm.hostname         = vm['name'] + settings['domain']
 
       # default alias to vm name
-      item.hostmanager.aliases = val['aliases'].collect { |a| a + settings['domain'] } if settings['hostmanager_enabled'] and val['aliases']
+      item.hostmanager.aliases = vm['aliases'].collect { |a| a + settings['domain'] } if settings['hostmanager_enabled'] and vm['aliases']
 
       # vm network config
-      item.vm.network 'private_network', ip: val['ip']
+      item.vm.network 'private_network', ip: vm['ip']
 
       # vm provider and resource settings
-      item.vm.provider val['provider'] do |vb|
-        vb.memory = val['memory']
+      item.vm.provider vm['provider'] do |vb|
+        vb.memory = vm['memory']
 
         # Use paravirtualized network in virtualbox for better performance
         # https://www.virtualbox.org/manual/ch06.html#nichardware
-        if val['provider'] == 'virtualbox'
+        if vm['provider'] == 'virtualbox'
           vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
           vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
         end
@@ -167,24 +167,24 @@ Vagrant.configure(2) do |config|
       item.vm.synced_folder ".", "/vagrant", disabled: settings['disable_default_synced_folder']
 
       # vm synced folders
-      val['synced_directories'].each do |mnt|
+      vm['synced_directories'].each do |mnt|
         item.vm.synced_folder mnt['src'], mnt['dest'],
-          owner: val['user'],
-          group: val['user']
+          owner: vm['user'],
+          group: vm['user']
       end
 
       # vm shell commands
-      item.vm.provision 'shell', inline: val['shell'] if val['shell']
+      item.vm.provision 'shell', inline: vm['shell'] if vm['shell']
 
       # run ansible on vm
-      if val['ansible_playbook']
+      if vm['ansible_playbook']
         item.vm.provision 'ansible' do |ansible|
           ansible.host_key_checking = false
-          ansible.inventory_path    = dirname + val['ansible_inventory_path']
-          ansible.limit             = val['ansible_limit']
-          ansible.raw_arguments     = val['ansible_raw_arguments']
-          ansible.extra_vars        = val['ansible_extra_vars']
-          ansible.playbook          = val['ansible_playbook']
+          ansible.inventory_path    = dirname + vm['ansible_inventory_path']
+          ansible.limit             = vm['ansible_limit']
+          ansible.raw_arguments     = vm['ansible_raw_arguments']
+          ansible.extra_vars        = vm['ansible_extra_vars']
+          ansible.playbook          = vm['ansible_playbook']
         end
       end
     end

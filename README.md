@@ -16,6 +16,10 @@ By default, yaml-vagrant handles updating the user's local ~/.ssh/config. It als
 yaml-vagrant works with the Ansible provisioner using the contained dynamic inventory script ([vagrant.py](https://github.com/colinhoglund/yaml-vagrant/blob/master/vagrant.py)). This allows you to define ansible settings and call ansible playbooks for vagrant VMs.
 
 ## Usage
+yaml-vagrant's _Vagrantfile_ works out of the box without a _vagrant.py_:
+
+    vagrant up
+
 The following examples give an idea of what a vagrant.yml file looks like. Once the vagrant.yml file has been created, you can use vagrant like you normally would (`vagrant status`, `vagrant up app`, etc.)
 
 Example vagrant.yml:
