@@ -1,0 +1,30 @@
+---
+
+box: bento/centos-7.3
+domain: .chef
+
+vms:
+  - name: server
+    ip: 192.168.20.20
+    memory: 4096
+    shell: |
+      if [ ! -d /drop ]; then
+        mkdir /drop
+      fi
+      if [ ! -d /downloads ]; then
+        mkdir /downloads
+      fi
+      if [ ! -f /downloads/chef-server-core-12.16.2-1.el7.x86_64.rpm ]; then
+        wget -nv -P /downloads https://packages.chef.io/files/stable/chef-server/12.16.2/el/7/chef-server-core-12.16.2-1.el7.x86_64.rpm
+      fi
+      if [ ! $(which chef-server-ctl) ]; then
+        yum install -y /downloads/chef-server-core-12.16.2-1.el7.x86_64.rpm
+        chef-server-ctl reconfigure
+        until (curl -D - http://localhost:8000/_status) | grep "200 OK"; do sleep 15s; done
+        while (curl http://localhost:8000/_status) | grep "fail"; do sleep 15s; done
+        chef-server-ctl user-create chefadmin Chef Admin admin@4thcoffee.com insecurepassword --filename /drop/chefadmin.pem
+        chef-server-ctl org-create 4thcoffee "Fourth Coffee, Inc." --association_user chefadmin --filename 4thcoffee-validator.pem
+      fi
+      echo "Your Chef server is ready!"
+  - name: node
+    ip: 192.168.20.30
